@@ -1,5 +1,34 @@
 let clickedCard = null;
 let preventClick = false;
+let combosFound = 0;
+
+const colors = [
+    'red',
+    'yellow',
+    'blue',
+    'green',
+    'grey',
+    'orange',
+    'pink',
+    'black'
+];
+
+const cards = [...document.querySelectorAll('.card')];
+
+for (let color of colors) {
+    const cardAIndex = parseInt(Math.random() * cards.length);
+    const cardA = cards[cardAIndex];
+    cards.splice(cardAIndex, 1);
+    cardA.className += ` ${color}`;
+    cardA.setAttribute('data-color', color);
+
+    const cardBIndex = parseInt(Math.random() * cards.length);
+    const cardB = cards[cardBIndex];
+    cards.splice(cardBIndex, 1);
+    cardB.className += ` ${color}`;
+    cardB.setAttribute('data-color', color);
+
+}
 
 function onCardClicked(e) {
     const target = e.currentTarget;
@@ -23,13 +52,12 @@ function onCardClicked(e) {
     // check if the new card matches the old card color  
     }else if (clickedCard){
 
-        preventClick = false;
+        
         
         if(clickedCard.getAttribute('data-color') !==
             target.getAttribute('data-color')
         ) {
-            console.log("cards NOT equal");
-
+            preventClick = true;
             setTimeout(() => {
                 clickedCard.className =
                 clickedCard.className.replace('done', '').trim() +
@@ -41,10 +69,16 @@ function onCardClicked(e) {
 
                 clickedCard = null;
                 preventClick = false;
+                
             }, 500);
             
         }else{
+            combosFound ++;
             clickedCard = null;
+            if(combosFound === 8){
+                alert('YOU WIN!!');
+            }
+            
         }                      
 
     }
